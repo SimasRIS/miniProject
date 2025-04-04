@@ -212,7 +212,7 @@ if __name__ == '__main__':
     grozine_literatura =[(UzsienioAutoriuRomanai, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/uzsienio-proza/?psl={}', 'Užsienio romanai'),
                          (Fantastika, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/fantastika-ir-fantasy/?psl={}', 'Fantastika'),
                          (DetektyvaiTrileriai, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/detektyvai-trileriai/?psl={}', 'Detektyvai/Trileriai'),
-                         (PoezijaDramaEse, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/poezija-drama-ese/?psl={}', ' Poezija/Drama/Ese')]
+                         (PoezijaDramaEse, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/poezija-drama-ese/?psl={}', 'Poezija/Drama/Ese')]
 
     visi_duomenys = [] # Saugosime visus musu duomenis
 
@@ -235,11 +235,11 @@ if __name__ == '__main__':
 
     print(len(visi_duomenys))
     print(visi_duomenys)
-
+# Issaugome duomenis i csn faila
 with open("../Duomenys/Isvalyti_failai/knygos.csv", "w", newline='', encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(["Knygos pavadinimas", "Autorius", "Kaina €",
-                     "Reitingas", "Įvertinimų skaičius", "Žanras"])
+                     "Reitingas", "Įvertinimų skaičius", "Žanras"]) # sukuriame stulpeliu pavadinimus
 
     for row in visi_duomenys:
         writer.writerow(row)
