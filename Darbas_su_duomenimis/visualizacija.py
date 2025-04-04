@@ -3,11 +3,9 @@ import pandas as pd
 import plotly.express as px
 
 # Pasiimame duomenis
-df = pd.read_csv('C:/Users/simas/PycharmProjects/miniProject/Duomenys/Isvalyti_failai/knygos.csv')
+df = pd.read_csv('C:/Users/simas/PycharmProjects/miniProject/Duomenys/Isvalyti_failai/knygos_cleaned.csv')
 
-# Skaiciuojame knygu skaiciu kiekviename zanre
-zanro_skaicius = df['Žanras'].value_counts().reset_index()
-zanro_skaicius.columns = ['Žanras', 'Knygų skaičius']
+
 
 # Ieskome top 10 geriausiu autoriu knygos.lt puslapyje
 """
@@ -27,7 +25,9 @@ autoriaus_vid_ivertinimas = df.groupby("Autorius").agg({
 # Kuriame bendra visu autoriu vidutini reitinga
 C =  autoriaus_vid_ivertinimas['Reitingas'].mean()
 
+# Nusakome minimalu ivertinomo skaiciu
 m = 12
+
 # Apskaiciuojame reitingo svori
 autoriaus_vid_ivertinimas['Reitingo svoris'] = ((autoriaus_vid_ivertinimas["Įvertinimų skaičius"] /
                                                 (autoriaus_vid_ivertinimas["Įvertinimų skaičius"] + m)) *
