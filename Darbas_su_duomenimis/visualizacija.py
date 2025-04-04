@@ -45,16 +45,100 @@ fig_bar_top = px.bar(
     text="Įvertinimų skaičius" ,
     title='Top 10 Autorių Knygos.lt Svetainėje',
     labels={"Reitingo svoris": "Reitingo svoris", "Autorius": "Autorius"},
-    template='plotly_white',
+    template='plotly_dark',
     color='Autorius'
 )
 fig_bar_top.show()
 
-# Kuriame burbuline diagrama
-fig_bubble = px.scatter(df, x='Kaina €', y='Reitingas', size='Įvertinimų skaičius',
-                        color='Žanras', hover_name='Knygos pavadinimas',
-                        title='Burbulinė diagrama: Kaina vs Reitingas',size_max=150,
-                        template='plotly_white')
-fig_bubble.show()
 
+# Kuriame skrituline diagrama parodancia kokio zanro yra daugiausia autoriu
+# Su GROUP BY suskaiciuojame kiek zanruose yra unikaliu autoriu.
+zanro_autoriai = df.groupby('Žanras')['Autorius'].nunique()
+zanro_autoriai = zanro_autoriai.reset_index(name="Autorių skaičius") # Pakeiciame stulpelio pavadinima
+print(zanro_autoriai)
+# Kuriame skrituline diagrama
+fig_pie = px.pie(
+    zanro_autoriai,
+    names='Žanras',
+    values="Autorių skaičius",
+    title='Autorių skaičius pagal žanrą',
+    template='plotly_dark'
+)
+fig_pie.show()
 
+# Kainu pasiskirstymo histograma
+fig_hist = px.histogram(
+    df, x='Kaina €', nbins=30, # nbins - gali keisti stulpeliu skaiciu
+    title='Kainų pasiskirstymas', labels={'Kaina €': 'Kaina €'},
+    template='plotly_dark'
+)
+fig_hist.update_layout(bargap=0.1) # Sumaziname tarpa tarp stulpeliu
+fig_hist.show()
+
+# Kainos vs Reitingo sklaidos diagrama
+fig_scatter = px.scatter(
+    df, x='Kaina €', y='Reitingas', title="Kaina vs Reitingas",
+    labels={'Kaina €': 'Kaina €', 'Reitingas': 'Reitingas'},
+    template='plotly_dark', hover_data=df.columns
+)
+fig_scatter.update_traces(marker=dict(size=10, opacity=0.7))
+fig_scatter.show()
+
+# Grupavimas pagal zanra ir vidutines kainos apskaiciavimas
+zanro_vid_kaina = df.groupby('Žanras', as_index=False)['Kaina €'].mean()
+
+# Apskaiciuojame bendrai visų knygu vidutine kaina
+overall_mean = df['Kaina €'].mean()
+
+# Randame zanra, kurio vidutine kaina yra didziausia (brangiausios)
+most_expensive_genre = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmax()]
+
+# Randame zanra, kurio vidutine kaina yra maziausia (pigiausios)
+cheapest_genre = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmin()]
+
+# Randame zanra, kurio vidutine kaina yra artimiausia bendrai vidutinei
+zanro_vid_kaina['diff'] = abs(zanro_vid_kaina['Kaina €'] - overall_mean)
+closest_to_overall = zanro_vid_kaina.loc[zanro_vid_kaina['diff'].idxmin()]
+
+# Isvedame rezultatus
+print("Brangiausias žanras:")
+print(most_expensive_genre.round(2))
+print("\nPigiausias žanras:")
+print(cheapest_genre.round(2))
+print("\nŽanras, kurio kaina artimiausia bendrai vidutinei:")
+print(closest_to_overall.round(2))
+
+# Vizualizacija: vidutines kainos pagal zanrus
+fig = px.bar(
+    zanro_vid_kaina,
+    x='Žanras',
+    y='Kaina €',
+    title='Vidutinė kaina pagal žanrus',
+    labels={'Kaina €': 'Vidutinė kaina', 'Žanras': 'Žanras'},
+    template='plotly_dark'
+)
+
+# Pazymime svarbiausias reiksmes: brangiausias, pigiausias ir artimiausias bendrai vidutinei
+fig.add_scatter(
+    x=[most_expensive_genre['Žanras']],
+    y=[most_expensive_genre['Kaina €']],
+    mode='markers',
+    marker=dict(color='red', size=12),
+    name='Brangiausias žanras'
+)
+fig.add_scatter(
+    x=[cheapest_genre['Žanras']],
+    y=[cheapest_genre['Kaina €']],
+    mode='markers',
+    marker=dict(color='green', size=12),
+    name='Pigiausias žanras'
+)
+fig.add_scatter(
+    x=[closest_to_overall['Žanras']],
+    y=[closest_to_overall['Kaina €']],
+    mode='markers',
+    marker=dict(color='blue', size=12),
+    name='Artimiausias bendrai vidutinei'
+)
+
+fig.show()
