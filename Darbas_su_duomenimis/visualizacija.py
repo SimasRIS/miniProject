@@ -7,7 +7,25 @@ df = pd.read_csv('C:/Users/simas/PycharmProjects/miniProject/Duomenys/Isvalyti_f
 
 
 
-# Ieskome top 10 geriausiu autoriu knygos.lt puslapyje
+# 1. Kainu pasiskirstymo histograma
+fig_hist = px.histogram(
+    df, x='Kaina €', nbins=30, # nbins - gali keisti stulpeliu skaiciu
+    title='Kainų pasiskirstymas', labels={'Kaina €': 'Kaina €'},
+    template='plotly_dark'
+)
+fig_hist.update_layout(bargap=0.1) # Sumaziname tarpa tarp stulpeliu
+fig_hist.show()
+
+# 2. Kainos vs Reitingo sklaidos diagrama
+fig_scatter = px.scatter(
+    df, x='Kaina €', y='Reitingas', title="Kaina vs Reitingas",
+    labels={'Kaina €': 'Kaina €', 'Reitingas': 'Reitingas'},
+    template='plotly_dark', hover_data=df.columns
+)
+fig_scatter.update_traces(marker=dict(size=10, opacity=0.7))
+fig_scatter.show()
+
+# 3. Ieskome top 10 geriausiu autoriu knygos.lt puslapyje
 """
 Weighted rating (WR) = (v ÷ (v+m)) × R + (m ÷ (v+m)) × C , where:
 
@@ -51,7 +69,7 @@ fig_bar_top = px.bar(
 fig_bar_top.show()
 
 
-# Kuriame skrituline diagrama parodancia kokio zanro yra daugiausia autoriu
+# 4. Kuriame skrituline diagrama parodancia kokio zanro yra daugiausia autoriu
 # Su GROUP BY suskaiciuojame kiek zanruose yra unikaliu autoriu.
 zanro_autoriai = df.groupby('Žanras')['Autorius'].nunique()
 zanro_autoriai = zanro_autoriai.reset_index(name="Autorių skaičius") # Pakeiciame stulpelio pavadinima
@@ -66,47 +84,30 @@ fig_pie = px.pie(
 )
 fig_pie.show()
 
-# Kainu pasiskirstymo histograma
-fig_hist = px.histogram(
-    df, x='Kaina €', nbins=30, # nbins - gali keisti stulpeliu skaiciu
-    title='Kainų pasiskirstymas', labels={'Kaina €': 'Kaina €'},
-    template='plotly_dark'
-)
-fig_hist.update_layout(bargap=0.1) # Sumaziname tarpa tarp stulpeliu
-fig_hist.show()
-
-# Kainos vs Reitingo sklaidos diagrama
-fig_scatter = px.scatter(
-    df, x='Kaina €', y='Reitingas', title="Kaina vs Reitingas",
-    labels={'Kaina €': 'Kaina €', 'Reitingas': 'Reitingas'},
-    template='plotly_dark', hover_data=df.columns
-)
-fig_scatter.update_traces(marker=dict(size=10, opacity=0.7))
-fig_scatter.show()
-
-# Grupavimas pagal zanra ir vidutines kainos apskaiciavimas
+# 5. Ieskome knygu vidutines kainos
+# Gruojame pagal zanra ir vidutines kainos apskaiciavima
 zanro_vid_kaina = df.groupby('Žanras', as_index=False)['Kaina €'].mean()
+print(zanro_vid_kaina)
+# Apskaiciuojame bendrai visu knygu vidutine kaina
+bendra_vidutine_kaina = df['Kaina €'].mean()
 
-# Apskaiciuojame bendrai visų knygu vidutine kaina
-overall_mean = df['Kaina €'].mean()
+# Ieskome zanro, kurio vidutine kaina yra didziausia (brangiausia)
+brangiausias_zanras = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmax()]
 
-# Randame zanra, kurio vidutine kaina yra didziausia (brangiausios)
-most_expensive_genre = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmax()]
+# Ieskome zanro, kurio vidutine kaina yra maziausia (pigiausia)
+pigiausias_zanras = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmin()]
 
-# Randame zanra, kurio vidutine kaina yra maziausia (pigiausios)
-cheapest_genre = zanro_vid_kaina.loc[zanro_vid_kaina['Kaina €'].idxmin()]
-
-# Randame zanra, kurio vidutine kaina yra artimiausia bendrai vidutinei
-zanro_vid_kaina['diff'] = abs(zanro_vid_kaina['Kaina €'] - overall_mean)
-closest_to_overall = zanro_vid_kaina.loc[zanro_vid_kaina['diff'].idxmin()]
+# Ieskome zanro, kurio vidutine kaina yra artimiausia bendrai vidutinei kainai
+zanro_vid_kaina['diff'] = abs(zanro_vid_kaina['Kaina €'] - bendra_vidutine_kaina)
+artimiausias_vid_kainai = zanro_vid_kaina.loc[zanro_vid_kaina['diff'].idxmin()]
 
 # Isvedame rezultatus
 print("Brangiausias žanras:")
-print(most_expensive_genre.round(2))
-print("\nPigiausias žanras:")
-print(cheapest_genre.round(2))
-print("\nŽanras, kurio kaina artimiausia bendrai vidutinei:")
-print(closest_to_overall.round(2))
+print(brangiausias_zanras.round(2))
+print("Pigiausias žanras:")
+print(pigiausias_zanras.round(2))
+print("Žanras, kurio kaina artimiausia bendrai vidutinei:")
+print(artimiausias_vid_kainai.round(2))
 
 # Vizualizacija: vidutines kainos pagal zanrus
 fig = px.bar(
@@ -120,25 +121,52 @@ fig = px.bar(
 
 # Pazymime svarbiausias reiksmes: brangiausias, pigiausias ir artimiausias bendrai vidutinei
 fig.add_scatter(
-    x=[most_expensive_genre['Žanras']],
-    y=[most_expensive_genre['Kaina €']],
+    x=[brangiausias_zanras['Žanras']],
+    y=[brangiausias_zanras['Kaina €']],
     mode='markers',
     marker=dict(color='red', size=12),
     name='Brangiausias žanras'
 )
 fig.add_scatter(
-    x=[cheapest_genre['Žanras']],
-    y=[cheapest_genre['Kaina €']],
+    x=[pigiausias_zanras['Žanras']],
+    y=[pigiausias_zanras['Kaina €']],
     mode='markers',
     marker=dict(color='green', size=12),
     name='Pigiausias žanras'
 )
 fig.add_scatter(
-    x=[closest_to_overall['Žanras']],
-    y=[closest_to_overall['Kaina €']],
+    x=[artimiausias_vid_kainai['Žanras']],
+    y=[artimiausias_vid_kainai['Kaina €']],
     mode='markers',
     marker=dict(color='blue', size=12),
-    name='Artimiausias bendrai vidutinei'
+    name='Artimiausias vidutinei kainai'
+)
+fig.show()
+
+# 6. Ieskome kiek yra pigiu, vidutines kainos ir brangiu knygu
+
+# Priskirsime kainas pagal kategorija
+def kainu_kategorija(kaina):
+    if kaina <= 10:
+        return 'Pigi (0-10 €)'
+    elif kaina <= 20:
+        return 'Vidutine (10-20 €)'
+    else:
+        return 'Brangi (>20 €)'
+
+# Kuriame stulpeli su kainu kategorija
+df["Kainu Kategorija"] = df["Kaina €"].apply(kainu_kategorija)
+
+# Skaiciuojame kiek yra knygu kiekvienoje kategorijoje
+kategoriju_skaicius = df["Kainu Kategorija"].value_counts().reset_index()
+kategoriju_skaicius.columns = ['Kainu Kategorija', 'Knygų skaičius']
+
+fig_bar_two = px.bar(
+    kategoriju_skaicius, x='Kainu Kategorija',
+    y='Knygų skaičius', text='Knygų skaičius',
+    title='Kygų skaičius pagal kategorijas',
+    labels={'Kainu Kategorija': 'Kainu Kategorija', 'Knygų skaičius':'Knygų skaičius'},
+    template='plotly_dark'
 )
 
-fig.show()
+fig_bar_two.show()
