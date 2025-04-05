@@ -168,5 +168,4 @@ fig_bar_two = px.bar(
     labels={'Kainu Kategorija': 'Kainu Kategorija', 'Knygų skaičius':'Knygų skaičius'},
     template='plotly_dark'
 )
-
 fig_bar_two.show()
