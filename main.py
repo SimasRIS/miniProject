@@ -11,7 +11,7 @@ def pagrindinis_meniu():
     print("5. DBSCAN grupavimas")
     print("6. Sprendimo medžio klasifikacija")
     print("7. Išeiti")
-    pasirinkimas = input("Įveskite pasirinkimo numerį (1-7)")
+    pasirinkimas = input("Įveskite pasirinkto veiksmo numerį (1-7)")
     return pasirinkimas
 
 def puslapio_nuskaitymas():
