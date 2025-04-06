@@ -207,14 +207,22 @@ class PoezijaDramaEse(WebScraper):
 
         self.knygu_duomenenys = knygu_scrape_info
 
-if __name__ == '__main__':
+def main():
     # Kuriame sarasa kuriame yra nurodyta klase, URL ir zanras
-    grozine_literatura =[(UzsienioAutoriuRomanai, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/uzsienio-proza/?psl={}', 'Užsienio romanai'),
-                         (Fantastika, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/fantastika-ir-fantasy/?psl={}', 'Fantastika'),
-                         (DetektyvaiTrileriai, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/detektyvai-trileriai/?psl={}', 'Detektyvai/Trileriai'),
-                         (PoezijaDramaEse, 'https://www.knygos.lt/lt/elektronines-knygos/zanras/poezija-drama-ese/?psl={}', 'Poezija/Drama/Ese')]
+    grozine_literatura = [(UzsienioAutoriuRomanai,
+                           'https://www.knygos.lt/lt/elektronines-knygos/zanras/uzsienio-proza/?psl={}',
+                           'Užsienio romanai'),
+                          (Fantastika,
+                           'https://www.knygos.lt/lt/elektronines-knygos/zanras/fantastika-ir-fantasy/?psl={}',
+                           'Fantastika'),
+                          (DetektyvaiTrileriai,
+                           'https://www.knygos.lt/lt/elektronines-knygos/zanras/detektyvai-trileriai/?psl={}',
+                           'Detektyvai/Trileriai'),
+                          (PoezijaDramaEse,
+                           'https://www.knygos.lt/lt/elektronines-knygos/zanras/poezija-drama-ese/?psl={}',
+                           'Poezija/Drama/Ese')]
 
-    visi_duomenys = [] # Saugosime visus musu duomenis
+    visi_duomenys = []  # Saugosime visus musu duomenis
 
     # Darome for cikla, kad eitu per grozines literaturos klases ir URL
     for scraper_klase, url_puslapis, zanras in grozine_literatura:
@@ -232,14 +240,15 @@ if __name__ == '__main__':
             else:
                 break
 
+    print(f"Išsaugota duomenų: {len(visi_duomenys)}")
+    # Issaugome duomenis i csn faila
+    with open("C:/Users/simas/PycharmProjects/miniProject/Duomenys/Isvalyti_failai/knygos.csv", "w", newline='', encoding="utf-8") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["Knygos pavadinimas", "Autorius", "Kaina €",
+                         "Reitingas", "Įvertinimų skaičius", "Žanras"])  # sukuriame stulpeliu pavadinimus
 
-    print(len(visi_duomenys))
-    print(visi_duomenys)
-# Issaugome duomenis i csn faila
-with open("../Duomenys/Isvalyti_failai/knygos.csv", "w", newline='', encoding="utf-8") as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(["Knygos pavadinimas", "Autorius", "Kaina €",
-                     "Reitingas", "Įvertinimų skaičius", "Žanras"]) # sukuriame stulpeliu pavadinimus
-
-    for row in visi_duomenys:
-        writer.writerow(row)
+        for row in visi_duomenys:
+            writer.writerow(row)
+    print(f"Duomenys išsaugoti {csvfile.name}")
+if __name__ == '__main__':
+    main()
