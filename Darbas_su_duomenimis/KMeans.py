@@ -25,7 +25,7 @@ def kmeans_funkcija():
     plt.scatter(df['Kaina €'], df['Reitingas'], c=df['Cluster'], cmap='viridis', alpha=0.6) # Imame X tada Y tada c/parametra, spalvas, apha permatomumas
     plt.xlabel('Kaina €')
     plt.ylabel('Reitingas')
-    plt.title('Knygų skirstymas pas kaina, reitinga ir įvertinimų skaičių')
+    plt.title('Knygų skirstymas pagal kaina, reitinga ir įvertinimų skaičių')
     plt.show()
 
 def main():
