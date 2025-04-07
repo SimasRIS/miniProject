@@ -9,6 +9,9 @@ import matplotlib.pyplot as plt
 # Pasirenkam data faila
 df = pd.read_csv('C:/Users/simas/PycharmProjects/miniProject/Duomenys/Isvalyti_failai/knygos_cleaned.csv')
 
+# DECISION TREE -  naudojome sprendimo medi, kad galetume prognozuoti pagal reitininga ir ivertinimu skaiciu,
+# produkto kaina, ar produktas pigus, vidutinis ar bangus
+
 def sprendimo_medzio_funkcija():
     # Priskirsime kainas pagal kategorija
     def kainu_kategorija(kaina):
