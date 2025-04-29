@@ -36,6 +36,49 @@ iš el. parduotuvės HTML puslapio.
 
 # miniProject
 
+## Diegimas ir paleidimas
+
+### Būtinos sąlygos
+
+- **Python ≥ 3.9**
+- **Git**
+
+### Įdiegimo ir paleidimo žingsniai
+
+```
+# 1. Klonuokite saugyklą iš GitHub
+git clone https://github.com/SimasRIS/miniProject.git
+cd miniProject
+
+# 2. (Rekomenduojama) sukurkite ir aktyvuokite virtualią aplinką
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
+# 3. Įdiekite priklausomybes
+pip install -r requirements.txt
+
+# 4. Paleiskite programą
+python main.py
+```
+
+### Programos naudojimas
+
+Paleidus `main.py`, terminale matysite šias parinktis:
+
+1. Duomenų nuskaitymas (web scraping)
+2. Duomenų valymas
+3. Vizualizacijos
+4. KMeans grupavimas
+5. DBSCAN grupavimas
+6. Sprendimo medžio klasifikacija
+7. Išeiti
+
+Pasirinkite norimą veiksmą įvesdami atitinkamą skaičių.
+
+
 ## Projekto apžvalga
 
 Šis projektas analizuoja elektronines knygas iš [Knygos.lt](http://Knygos.lt) svetainės. Jis renka, tvarko ir analizuoja informaciją apie knygas.
