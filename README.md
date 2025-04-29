@@ -38,11 +38,6 @@ iš el. parduotuvės HTML puslapio.
 
 ## Diegimas ir paleidimas
 
-### Būtinos sąlygos
-
-- **Python ≥ 3.9**
-- **Git**
-
 ### Įdiegimo ir paleidimo žingsniai
 
 ```
