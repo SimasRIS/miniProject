@@ -42,18 +42,32 @@ iš el. parduotuvės HTML puslapio.
 
 
 1. Klonuokite saugyklą iš GitHub<br>
-```git clone https://github.com/SimasRIS/miniProject.git```<br>
-```cd miniProject```
+```
+1. git clone https://github.com/SimasRIS/miniProject.git
+```
+```
+cd miniProject
+```
 2. (Rekomenduojama) sukurkite ir aktyvuokite virtualią aplinką<br>
-```python -m venv venv```
+```
+python -m venv venv
+```
    - Windows<br>
-   ```venv\Scripts\activate```
+   ```
+venv\Scripts\activate
+   ```
    - macOS/Linux<br>
-   ```source venv/bin/activate```
+   ```
+source venv/bin/activate
+   ```
 3. Įdiekite priklausomybes<br>
-```pip install -r requirements.txt```
+```
+pip install -r requirements.txt
+```
 4. Paleiskite programą<br>
-```python main.py```
+```
+python main.py
+```
 
 
 ### Programos naudojimas
